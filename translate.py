@@ -5,6 +5,7 @@ import pykakasi
 from googletrans import Translator
 from google.cloud import vision
 import io
+import os
 
 # SETTINGS (make a difference)
 source = "ja"
@@ -14,6 +15,7 @@ destination = "en"
 application_name = "Image translator (press q to quit, press w to refresh, press f to take a full screenshot)"
 transImg = "transImg.png"
 fullImg = "fullImg.png"
+pyscreenshot.grab().save(fullImg)
 kks = pykakasi.kakasi()
 translator = Translator()
 
@@ -114,18 +116,17 @@ while True:
         break
     # If press w update the area with new information.
     if (cv2.waitKey(1) & 0xFF) == ord("w"):
-        im = pyscreenshot.grab(bbox=(x_startPos, y_startPos, x_endPos, y_endPos))
-        im.save(fullImg)
+        pyscreenshot.grab(bbox=(x_startPos, y_startPos, x_endPos, y_endPos)).save(fullImg)
         cv2.waitKey(50)
         picture = cv2.imread(fullImg)
         oriImage = picture.copy()
     # If press f take a screenshot of the whole desktop.
     if (cv2.waitKey(1) & 0xFF) == ord("f"):
-        im = pyscreenshot.grab()
-        im.save(fullImg)
+        pyscreenshot.grab().save(fullImg)
         cv2.waitKey(50)
         picture = cv2.imread(fullImg)
         oriImage = picture.copy()
 
-
+os.remove("fullImg.png")
+os.remove("transImg.png")
 cv2.destroyAllWindows()
