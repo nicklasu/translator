@@ -2,12 +2,14 @@ import re
 import pyscreenshot
 import cv2
 import pykakasi
+import pyautogui
 from googletrans import Translator
 from google.cloud import vision
 import io
 import os
 
-# SETTINGS (make a difference)
+# You can mod this program to translate any language. Just change the screen_translate implementation
+# and these variables.
 source = "ja"
 destination = "en"
 
@@ -15,7 +17,9 @@ destination = "en"
 application_name = "Image translator (press q to quit, press w to refresh, press f to take a full screenshot)"
 transImg = "transImg.png"
 fullImg = "fullImg.png"
-pyscreenshot.grab().save(fullImg)
+
+width, height = pyautogui.size()
+pyscreenshot.grab(bbox=(0, 0, width - 1, height - 1)).save(fullImg)
 kks = pykakasi.kakasi()
 translator = Translator()
 
@@ -56,7 +60,7 @@ def screen_translate():
 cropping = False
 croppingImg = False
 x_start, y_start, x_end, y_end = 0, 0, 0, 0
-x_startPos, y_startPos, x_endPos, y_endPos = 0, 0, 0, 0
+x_startPos, y_startPos, x_endPos, y_endPos = 0, 0, width, height
 picture = cv2.imread(fullImg)
 oriImage = picture.copy()
 
